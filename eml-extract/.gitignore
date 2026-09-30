@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.venv/
+
+# 原始信件與抽出的附件都可能含個資／招募方逐字內容
+in/
+out/
+*.eml
+
+# README 的 -o out.md、--save-attachments ./att 等寫在工具目錄的輸出：
+# 只保留文件本身
+*.md
+!README.md
+!CLAUDE.md
+*.txt
+*.json
+att/

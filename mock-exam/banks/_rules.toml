@@ -1,0 +1,51 @@
+# Mock_Exam 共用計分規則。題庫（banks/*.toml）只放題目，規則放這裡。
+#
+# 🔴 這個檔案只描述「可以機械比對的東西」：正規表示式、字串、秒數。
+#    任何需要判斷「答得好不好」的東西都不該寫進來 —— 那是人的工作。
+#
+# 下面的紅線是**範例**：示範每一條要寫 pattern 與 why。要用自己的版本就複製一份：
+#     cp banks/_rules.toml banks/_rules.local.toml
+# mock.py 有 _rules.local.toml 就讀它（已被 .gitignore 擋住），在那裡加自己的教訓，
+# 例如把自己的現薪數字加進「現薪」那條的 pattern。這份範例不要寫進個人數字。
+
+[filler]
+# 填充詞。報告算「每分鐘出現次數」，不設及格線 —— 數字自己會說話。
+zh = ["就是", "然後", "那個", "呃", "嗯", "對對對", "基本上"]
+en = ["um", "uh", "like", "you know", "basically", "actually", "sort of", "kind of"]
+
+# ---------------------------------------------------------------------------
+# 紅線：講出來就是失分，不分題目一律檢查。
+# 每一條都對應一個教訓，why 欄位寫清楚是哪一個。
+# ---------------------------------------------------------------------------
+
+[[redline]]
+pattern = "(?i)\\bI\\s+led\\b"
+why = "SCOPE OF OWNERSHIP：團隊專案不可說 I led。改用 I proposed / I made the case / I was the only engineer on"
+
+[[redline]]
+pattern = "(?i)\\bI\\s+drove\\b"
+why = "同上。I drove the strategy 是最容易被追問到崩的說法"
+
+[[redline]]
+pattern = "(?i)\\bfluent\\b"
+why = "英文程度不要自評 fluent。講 intermediate 或直接講檢定分數"
+
+[[redline]]
+pattern = "待業|目前沒有工作|目前無工作|離職之後|空窗|可立即到職|隨時可上班"
+why = "不主動揭露待業狀態。要講到職時間就講「沒有預告期」"
+
+[[redline]]
+pattern = "我現在(的)?(月)?薪(水|資)?是|目前(的)?(月)?薪(水|資)?是|現薪"
+why = "現薪不主動揭露，揭露即被錨定。範例：把自己的數字（含 K、萬的寫法）也加進 pattern"
+
+[[redline]]
+pattern = "(?i)我覺得應該|我猜|大概是吧|好像是"
+why = "不確定就講「我沒做過，我的理解是」—— 模糊的猜測比誠實的不知道扣更多"
+
+[[redline]]
+pattern = "帶領|主導|我領導|由我負責整個|我帶著"
+why = "SCOPE OF OWNERSHIP 的中文版。履歷寫的是「支援」就講支援；改講「支援過」「我參與的部分是」"
+
+[[redline]]
+pattern = "主要(負責|是我|maintainer|Maintainer|的維護)"
+why = "「主要」會招來「那還有誰？」。如果只有你一個人，就直接講「程式碼跟測試都是我寫的」"

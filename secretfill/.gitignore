@@ -1,0 +1,27 @@
+__pycache__/
+*.pyc
+.venv/
+
+# 填好的表單一律不進版控（含個資）。out/ 是建議的輸出目錄，只留 .gitkeep 讓目錄存在
+out/*
+!out/.gitkeep
+*.filled.docx
+*.bak.*
+
+# 個人的欄位登記表（欄位名稱是個人化的；從 fields.example.toml 複製一份）
+fields.toml
+
+# 表單原檔與 -o 寫出的成品（不管檔名、放在哪）：填好後就含個資
+*.doc
+*.docx
+*.dotx
+*.odt
+*.ott
+*.rtf
+*.pages
+*.pdf
+*.txt
+*.xls
+*.xlsx
+*.ods
+*.numbers

@@ -1,0 +1,59 @@
+# transcribe 常用設定
+# ---------------------------------------------------------------
+# 優先序：命令列參數 > 本檔 > 程式內建預設。
+# 找檔順序：--config 指定的路徑 > 環境變數 $TRANSCRIBE_CONFIG > 本腳本旁的 core.toml。
+# 設定放在 [transcribe] 表底下（也接受直接放頂層）。
+# groups / extra / formats / temperature 可寫成逗號字串或陣列，兩種都吃。
+#
+# 🔒 預設完全離線（腳本自動設 HF_HUB_OFFLINE=1）。第一次下載模型才需連線，
+#    用命令列 --allow-download 放行那一次；離線與否不在本檔設定。
+
+[transcribe]
+# 模型：HuggingFace repo 名，或本機模型資料夾的「絕對路徑」（mlx-whisper 兩者皆可）。
+# 想離線指定本機模型，就把下行換成路徑，例如：
+#   model = "~/models/whisper-large-v3-mlx"
+# 想快 1.6 倍、可接受技術英文名詞失真，改成 "mlx-community/whisper-large-v3-turbo"。
+model = "mlx-community/whisper-large-v3-mlx"
+
+# 語言代碼。留空字串 "" 讓模型自動偵測。
+# ⚠ 英文錄音要用 --language en（或 --language ""）覆寫：強制 zh 會讓 Whisper 把英文
+#   翻成中文，而且多半是簡體（實際發生過）。
+language = "zh"
+
+# initial_prompt 用的關鍵字詞組（可用 --groups 覆蓋）。
+groups = ["core"]
+
+# 每場面試的額外詞（公司名、面試官姓氏、產品名）。平常留空，當場用 --extra 加。
+extra = ""
+
+# 輸出格式：txt / srt / json 任選。
+formats = ["txt", "srt"]
+
+# 輸出目錄。相對路徑相對於本腳本所在資料夾。
+out_dir = "out"
+
+# 溫度回退序列。⚠ 不要只給一個 0，那會關掉 Whisper 的重複偵測，靜音處會鬼打牆。
+temperature = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+
+# 完全不用 initial_prompt（true/false）。
+no_prompt = false
+
+# 保留重複/幻覺段，除錯用（true/false）。
+keep_repetitive = false
+
+# 顯示轉錄進度條（依音檔時間比例，含已用/預估剩餘時間）。關掉用 --no-progress。
+progress = true
+
+# 語者標記：把每段標成「我」或「對方」（txt/srt 加前綴，json 加 speaker 欄）。
+# 需要先註冊聲紋：`uv run speaker.py fetch-models && uv run speaker.py enroll ...`
+# 判定門檻是每份錄音自己導出的，不需要校正——固定門檻在 8kHz 電話錄音上會誤判
+# （跨六場實測各場最佳門檻 0.256~0.486，相差 0.23）。
+# 命令列用 --diarize / --no-diarize 覆寫。
+diarize = true
+
+# 要標成「我」的那組聲紋名稱（對應 speaker/enroll/<名稱>.npy）。
+speaker_target = "me"
+
+# 中文輸出用 OpenCC s2tw 轉繁體（true/false）。只轉字形、不轉詞彙；台／了／只保留原字。
+# 只在輸出語言是中文時作用。命令列用 --no-s2tw 關掉。
+s2tw = true

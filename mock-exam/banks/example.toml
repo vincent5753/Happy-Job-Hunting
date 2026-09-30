@@ -1,0 +1,70 @@
+# 範例題庫 —— 進版控用，示範格式，不含任何真實場次的資訊
+#
+# 真的題庫（banks/<公司>.toml）寫著薪資與個人經歷，由 .gitignore 擋在版控外；
+# 換機器 clone 下來時，複製這份改成自己的場次即可。
+#
+#   uv run mock.py banks/example.toml --text        # 不放音，用文字出題
+#   uv run mock.py banks/example.toml --prerender   # 先算題目音檔
+#
+# 欄位說明（mock.py 只強制 id 與 text，其餘都可省略）：
+#   target_seconds / tolerance  回答長度的目標秒數與容許誤差（預設 15）
+#   anchors                     希望講到的關鍵字；可用 | 列同義寫法，逐項算命中
+#   must_say                    一定要出現的字，漏了會在報告標出
+#   hint                        練完才顯示的提示，給自己看的講稿骨架
+#
+# 🔴 題目是提問，不是事實來源。anchors 只放你履歷上已經有的東西；
+#    不要為了對上 JD 在這裡編經歷，mock 會把它練成習慣。
+# 🔴 薪資題請寫在自己的題庫裡，不要回填到這份。
+
+[bank]
+name = "範例公司 SRE（示範）"
+company = "範例公司"
+role = "Site Reliability Engineer"
+slug = "example-sre"
+round = "hiring-manager"
+lang = "zh"
+voice = "Meijia"          # macOS say 的聲音；say -v '?' 列出全部
+rate = 175                # 每分鐘字數
+
+# ---------------------------------------------------------------------------
+
+[[question]]
+id = "intro"
+text = "你好，那我們先開始。可以請你先簡單自我介紹一下嗎？"
+target_seconds = 60
+tolerance = 15
+anchors = ["年資|工作經驗", "負責", "專案", "工具"]
+hint = "現職 → 做過最有代表性的一件事 → 為什麼想做這個職位。一分鐘內講完"
+
+[[question]]
+id = "incident"
+text = "講一次你處理過的線上事故。當時怎麼發現的？你做了哪些判斷？"
+target_seconds = 90
+tolerance = 20
+anchors = ["告警|監控", "影響範圍", "暫時|止血", "根因", "事後|檢討"]
+must_say = ["根因"]
+hint = "照時間序講：發現 → 止血 → 找根因 → 事後改了什麼。自己做的與團隊做的要分開講"
+
+[[question]]
+id = "monitoring"
+text = "如果要幫一個新服務設計監控，你會先看哪些指標？"
+target_seconds = 60
+tolerance = 15
+anchors = ["延遲|latency", "錯誤率", "流量|throughput", "飽和|saturation", "告警"]
+hint = "四個黃金訊號起手，再講告警要對應到有人能處理的動作"
+
+[[question]]
+id = "unknown"
+text = "如果面試官問到一個你沒碰過的工具，你會怎麼回答？"
+target_seconds = 30
+tolerance = 10
+must_say = ["沒有做過|沒做過"]
+hint = "先承認沒做過，再講你理解的原理，最後講會怎麼上手。不要猜"
+
+[[question]]
+id = "reverse"
+text = "最後，你有什麼問題想問我們嗎？"
+target_seconds = 45
+tolerance = 15
+anchors = ["團隊", "值班|on-call", "期待"]
+hint = "準備兩題：這個職位頭三個月的期待、值班怎麼排"

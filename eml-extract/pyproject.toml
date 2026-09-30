@@ -1,0 +1,9 @@
+[project]
+name = "eml-extract"
+version = "0.1.0"
+description = "Decode a .eml into readable parts (metadata, text/plain, stripped HTML, attachments) and flag templating leaks"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.uv]
+package = false

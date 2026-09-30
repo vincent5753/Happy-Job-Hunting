@@ -1,0 +1,19 @@
+[project]
+name = "transcribe"
+version = "0.1.0"
+description = "Local-only speech-to-text for recordings — interviews, meetings, calls (mlx-whisper, Apple Silicon)"
+# sherpa-onnx（語者標記）在 PyPI 上只有 1.10.46 有可用的 macOS arm64
+# wheel，而它沒有 3.13/3.14 的 wheel（退回原始碼編譯會失敗）。mlx 在 3.12
+# 與 3.14 是同一版（0.32.2），所以釘 3.12 對轉錄品質沒有影響。
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "mlx-whisper>=0.4.0",
+    # 中文輸出轉繁體（s2tw）。純 Python、字典隨套件附帶，不需要連線。
+    "opencc-python-reimplemented>=0.1.7",
+    # 語者標記用的聲紋 embedding（3D-Speaker CAM++）。1.13.8 的 macOS arm64
+    # wheel 沒把 libonnxruntime.dylib 包進去，import 就 dlopen 失敗，故釘死。
+    "sherpa-onnx==1.10.46",
+]
+
+[tool.uv]
+package = false

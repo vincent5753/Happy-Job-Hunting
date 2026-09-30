@@ -1,0 +1,14 @@
+# 題目音檔是從題庫算出來的，可重建
+audio/
+# 錄音、逐字稿、報告含面試內容與薪資，絕不進版控
+out/
+.venv/
+__pycache__/
+# 題庫、回答稿、自己的紅線（_rules.local.toml）寫著現薪／期待薪資，同上理由不進版控。
+# 只保留範例 example.toml 與 _rules.toml
+banks/*.toml
+!banks/_rules.toml
+# say 產出的題目音檔（頂層也擋 aiff，這裡保險再擋一次）
+*.aiff
+
+!banks/example.toml

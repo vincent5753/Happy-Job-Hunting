@@ -1,0 +1,14 @@
+[project]
+name = "mock-exam"
+version = "0.1.0"
+description = "Local-only mock interview runner: TTS prompts, mic capture, offline transcription, mechanical scoring"
+# 與 transcribe 對齊。mlx-whisper 在 3.12 與 3.14 是同一版，
+# 釘 3.12 對轉錄品質沒有影響，但兩個專案共用同一顆模型快取。
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "mlx-whisper>=0.4.0",
+    "opencc-python-reimplemented>=0.1.7",
+]
+
+[tool.uv]
+package = false

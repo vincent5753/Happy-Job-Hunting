@@ -1,0 +1,59 @@
+# macOS
+.DS_Store
+
+# Python 共通（各子專案另有自己的 .gitignore，會疊加生效）
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 環境／金鑰（保險起見頂層也擋一層）
+.env
+.envrc
+*.key
+
+# 面試錄音／錄影／逐字稿、行事曆邀請、廠商信件：
+# 含第三方的聲音影像與 Email，且廠商信夾帶過活的 JWT。
+# 單一公司的面試資料一律放 interviews/<公司>/ 底下
+interviews/
+*.ics
+*.eml
+
+# 音訊與影像副檔名要在頂層擋一次。子專案的 .gitignore 只在自己的目錄內生效，
+# 所以會議工具下載到 repo root 的錄影檔（實際發生過一次）不會被 transcribe/
+# 的規則擋住，一次 git add -A 就會進版控。
+*.mp4
+*.mov
+*.m4v
+*.m4a
+*.mp3
+*.wav
+*.flac
+*.webm
+*.aiff
+*.aif
+*.ogg
+*.opus
+*.aac
+
+# 逐字稿字幕（transcribe 用 -o 或改 out_dir 寫到別處時的保險）
+*.srt
+*.vtt
+
+# SQLite 本體（例如 scrawler 的 --db <沙盒檔> 放在 data/ 以外）
+*.db
+*.sqlite
+*.sqlite3
+
+# 聲紋向量（speaker embedding）是生物特徵。transcribe 的 speaker/enroll/
+# 已經擋住，這裡再依副檔名擋一次：存檔路徑改了也不會漏進版控
+*.npy
+*.npz
+
+# 改檔前的備份一律不進版控（含 SQLite 的 -shm/-wal 附屬檔）
+*.bak
+*.bak.*
+*.bak[0-9]
+*.bak[0-9].*
+*-shm
+*-wal

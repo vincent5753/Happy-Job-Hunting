@@ -1,0 +1,55 @@
+# 欄位登記表 —— 範本。複製成 fields.toml 再改成你自己的欄位：
+#
+#     cp fields.example.toml fields.toml
+#     uv run secretfill.py set <欄位名稱>
+#
+# 這個檔只放「欄位名稱」與「說明」，**永遠不放值**。
+# 值存在 macOS Keychain：service = <見 secretfill.py 的 SERVICE>，account = 欄位名稱。
+#
+# 佔位符寫法：在表單裡填 __phone_number__
+#
+# 兩種登記寫法：
+#
+#     emergency_name = "緊急聯絡人姓名"                   # 只有說明
+#
+#     phone_number = { label = "手機號碼",                 # 加上格式
+#                      format = "09xxxxxxxx（不加分隔符號）",
+#                      pattern = "09\\d{8}" }
+#
+#   label    必填，這個欄位是做什麼的
+#   format   選填，給人看的格式提示。set 會在你輸入前先顯示，list／fill 也會帶出來
+#   pattern  選填，正規表示式。set 存完會回頭對一次，fill 預演時也會對一次
+#            —— 只警告，不擋，因為表單格式的例外永遠比規則多
+#
+# ⚠ 格式一律寫在這裡，不要寫進 secretfill.py。什麼算合法的電話、身分證或日期，
+#   是「發表單的那個國家」的性質，不是這支工具的性質。下面這份範例是台灣的表單；
+#   換一個國家用，改這個檔就好，程式碼一行都不用動。
+#
+# ⚠ 下面的 pattern 都是範例，沒有做完整驗證（例如身分證字號的檢查碼就沒有算）。
+#   它的用途是擋住「手滑打錯一碼」，不是擋住偽造。
+
+# 出生日期只存一筆（民國年），其他寫法由工具換算，不在這裡登記：
+#   __birth_date_roc__      84/10/10
+#   __birth_date_ce__       1995/10/10
+#   __birth_date_roc_cjk__  民國84年10月10日
+#   __birth_date_ce_cjk__   1995年10月10日
+# 裸的 __birth_date__ 會依文件裡其他日期欄位判定曆法並印出理由。
+#
+# 這組換算是台灣專屬的（民國紀年）。用不到就不要登記 birth_date_roc，
+# 直接登記一個自己的 birth_date 欄位當普通字串存。
+
+# prefix = "myproject"   # 選用，必須寫在 [fields] 之前（頂層）。設了之後不帶前綴的佔位符會當別名解析。預設不設。
+
+[fields]
+# --- 敏感、每張表都要填 ---
+id_number       = { label = "身分證字號", format = "A123456789", pattern = "[A-Z][12]\\d{8}" }
+birth_date_roc  = { label = "出生年月日（存民國年，西元由工具換算）", format = "84/10/10" }
+address_mail    = { label = "通訊地址", format = "(郵遞區號) 縣市…" }
+phone_number    = { label = "手機號碼", format = "09xxxxxxxx（不加分隔符號）", pattern = "09\\d{8}" }
+
+# --- 不敏感，但每張表都要填、內容永遠一樣 ---
+edu_bs_school = "大學校名"
+edu_bs_major  = "大學科系"
+edu_bs_from   = { label = "大學入學年月", format = "YYYY/MM", pattern = "\\d{4}/\\d{2}" }
+edu_bs_to     = { label = "大學離校年月", format = "YYYY/MM", pattern = "\\d{4}/\\d{2}" }
+

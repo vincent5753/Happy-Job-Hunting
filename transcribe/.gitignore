@@ -1,0 +1,21 @@
+# 錄音與逐字稿含公司內部資訊與薪資，一律不進版控
+audio/
+out/
+*.wav
+*.flac
+*.m4a
+*.mp3
+.venv/
+__pycache__/
+bench/
+
+# 聲紋是生物特徵，模型 27MB 可重新下載
+speaker/enroll/
+speaker/models/
+# 手寫的標記檔（不管取什麼名字）：註解常寫著公司與對方姓名。只有範例進版控
+*.tsv
+!speaker/labels.example.tsv
+# 逐字稿（--formats txt,srt,json）寫到 out/ 以外時的保險
+*.txt
+*.srt
+*.json
