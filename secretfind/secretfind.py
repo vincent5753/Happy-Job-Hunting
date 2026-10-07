@@ -554,9 +554,13 @@ def load_config(path: Path) -> dict:
 
 
 def cmd_scan(args):
-    # CLI 與 config 合併：路徑、排除規則、service 取聯集；max_size 以 CLI 為準。
+    # CLI 與 config：路徑與 max_size 以 CLI 為準（有給就取代 config 的）；
+    # 排除規則、service 取聯集 —— 這兩種通常是一路累加，-e 多加一條比整份重寫常見。
     cfg = load_config(Path(args.config).expanduser().resolve()) if args.config else {}
-    raw_paths = args.paths + cfg.get("paths", [])
+    raw_paths = args.paths or cfg.get("paths", [])
+    if args.paths and cfg.get("paths"):
+        print(f"指令列有給路徑，略過 {Path(args.config).name} 的 paths"
+              f"（{len(cfg['paths'])} 個）", file=sys.stderr)
     if not raw_paths:
         die("沒有要掃的路徑：在指令後面給路徑，或在 --config 裡寫 paths")
     roots = list(dict.fromkeys(Path(p).expanduser().resolve() for p in raw_paths))
@@ -649,10 +653,11 @@ def main():
 
     s = sub.add_parser("scan", help="掃描路徑底下所有檔案")
     s.add_argument("paths", nargs="*", metavar="path",
-                   help="要掃的檔案或目錄（可省略，改由 --config 的 paths 提供）")
+                   help="要掃的檔案或目錄。有給就取代 --config 的 paths；省略則用 config 的")
     s.add_argument("-c", "--config", metavar="FILE",
                    help="TOML 設定檔：paths、exclude、service、max_size、"
-                        "default_excludes（範本見 secretfind.example.toml）")
+                        "default_excludes（範本見 secretfind.example.toml）。"
+                        "指令列的路徑與 --max-size 取代 config 的；-e、--service 與 config 的合併")
     s.add_argument("-e", "--exclude", action="append", default=[], metavar="PATTERN",
                    help="排除的檔案或路徑（可重複）。沒有 / 比對任何深度的名稱"
                         "（.git、*.mp4）；有 / 比對相對掃描根目錄的路徑（data/raw）；"

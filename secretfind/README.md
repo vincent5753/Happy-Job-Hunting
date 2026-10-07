@@ -16,6 +16,7 @@ uv run secretfind.py rm gh_token                # 從 Keychain 刪除
 uv run secretfind.py scan ~/some/repo                       # 掃描
 uv run secretfind.py scan ~/a ~/b -e '*.mp4' -e data/raw    # 多個路徑＋排除
 uv run secretfind.py scan -c scan.toml                      # 路徑與排除寫在設定檔
+uv run secretfind.py scan -c scan.toml ~/other             # 同一份排除規則，改掃 ~/other（取代 config 的 paths）
 uv run secretfind.py scan . --service Happy-Job-Hunting     # 改掃 secretfill 存的個資
 ```
 
@@ -140,7 +141,8 @@ exclude = ["*.mp4", "data/raw"]
 ```
 
 - 所有鍵都是選填。**不認識的鍵直接報錯** —— 寫成 `excludes` 卻默默多掃，比報錯更糟。
-- 和指令列合併：`paths`、`exclude`、`service` 取聯集；`max_size` 以指令列為準。
+- 和指令列的關係：**`paths`、`max_size` 以指令列為準**（指令列有給就取代，會在 stderr 註明略過了 config 的 paths）；`exclude`、`service` 取聯集 —— 排除規則通常是累加的，`-e` 多加一條比整份重寫常見。
+  所以 `scan -c scan.toml ~/other` 就是「用 scan.toml 的排除規則掃 ~/other」。
 - 設定檔只放路徑與規則，**永遠不放值**。
 
 ## 安全設計

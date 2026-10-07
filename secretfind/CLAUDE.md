@@ -36,14 +36,16 @@ uv run secretfind.py rm gh_token
 uv run secretfind.py scan <路徑>...                        # 掃描
 uv run secretfind.py scan <路徑> -e '*.mp4' -e data/raw    # 排除，可重複
 uv run secretfind.py scan -c scan.toml                    # 路徑與排除寫在設定檔
+uv run secretfind.py scan -c scan.toml <路徑>             # 同一份排除規則改掃別處（取代 config 的 paths）
 uv run secretfind.py scan <路徑> --service Happy-Job-Hunting  # 改掃 secretfill 的個資
 ```
 
 排除規則語法（fnmatch，**不是**完整 gitignore）：沒有 `/` 比對任何深度的名稱、有 `/` 比對相對掃描根目錄的路徑、
 `/` 或 `~` 開頭是絕對路徑。`.git`、`.venv`、`node_modules` 等預設就排除，要掃就加 `--no-default-excludes`。
 
-設定檔從 `secretfind.example.toml` 複製成 `scan.toml`（已 gitignore）；指令列的路徑、`-e`、`--service`
-和設定檔取聯集。
+設定檔從 `secretfind.example.toml` 複製成 `scan.toml`（已 gitignore）。指令列有給路徑就**取代**設定檔的
+`paths`（`--max-size` 同理）；`-e`、`--service` 則和設定檔的**合併**。所以 `scan -c scan.toml <別的路徑>`
+是「用同一份排除規則掃別的地方」。
 
 ## 讀報告
 
