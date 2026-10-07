@@ -9,6 +9,7 @@
 |---|---|---|
 | `transcribe/` | 錄音離線轉譯（面試、會議、通話）、語者標記、錄音 | [`transcribe/CLAUDE.md`](transcribe/CLAUDE.md) |
 | `secretfill/` | 表單佔位符 → macOS Keychain 取代 | [`secretfill/CLAUDE.md`](secretfill/CLAUDE.md) |
+| `secretfind/` | 掃描路徑底下有沒有 Keychain 裡的 credential（secretfill 的反向；含 docx、PDF、base64 等寫法） | [`secretfind/CLAUDE.md`](secretfind/CLAUDE.md) |
 | `eml-extract/` | `.eml` 解碼，預設遮蔽憑證 | [`eml-extract/CLAUDE.md`](eml-extract/CLAUDE.md) |
 | `mock-exam/` | 本地模擬面試（TTS 出題、錄音、機械計分） | [`mock-exam/mock.py`](mock-exam/mock.py) 開頭、[`banks/example.toml`](mock-exam/banks/example.toml) 檔頭 |
 | `timer/` | 終端機計時器（純 bash） | `README.md` 的 timer 段 |
@@ -30,6 +31,7 @@ brew install uv ffmpeg
 |---|---|
 | `transcribe` | `uv run transcribe.py <音檔> --allow-download` 下載模型（只有這次連網）；要分「我／對方」再做聲紋註冊 |
 | `secretfill` | `cp fields.example.toml fields.toml`，再 `uv run secretfill.py set <欄位>` 存值（值在 Keychain，不在檔案） |
+| `secretfind` | `uv run secretfind.py add <名稱>` 存要找的 credential（互動輸入，值在 Keychain）；要用設定檔就 `cp secretfind.example.toml scan.toml` |
 | `mock-exam` | `cp banks/example.toml banks/<公司>.toml` 改題目；`cp banks/_rules.toml banks/_rules.local.toml` 寫自己的紅線；第一次跑加 `--allow-download` 下載計分模型 |
 | `eml-extract`、`timer` | 無 |
 

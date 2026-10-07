@@ -1,0 +1,13 @@
+[project]
+name = "secretfind"
+version = "0.1.0"
+description = "Scan folders for credentials stored in the macOS Keychain (values never printed, never in argv)"
+requires-python = ">=3.11"
+license = "GPL-2.0-only"          # 全文在 repo root 的 LICENSE
+authors = [{ name = "vincent5753" }]
+dependencies = [
+    "pypdf>=6.19.0",
+]
+
+[tool.uv]
+package = false
