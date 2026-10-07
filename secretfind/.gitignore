@@ -2,4 +2,6 @@ __pycache__/
 *.pyc
 .venv/
 *.bak.*
+# 個人的掃描設定（含自己的路徑）；從 secretfind.example.toml 複製
 scan.toml
+secretfind.toml

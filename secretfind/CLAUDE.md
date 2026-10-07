@@ -76,7 +76,10 @@ offer.pdf:(第 2 頁)                      gh_token  原文
 
 ## 測試
 
-不要拿真的 credential 測。用拋棄式 keychain，放在 scratchpad：
+**改完程式先跑 `bash test.sh`**（全部通過才算完成；`-v` 看完整輸出）。它自己建拋棄式 keychain、
+自己清掉。新功能要在 `test.sh` 補一項 `check`。`add` 的互動輸入要手動測，步驟在檔尾。
+
+不要拿真的 credential 測。要另外做實驗時，一樣用拋棄式 keychain，放在 scratchpad：
 
 ```bash
 bash <<'EOF'
