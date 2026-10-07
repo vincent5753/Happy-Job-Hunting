@@ -585,14 +585,24 @@ def cmd_set(args):
         if field not in fields:
             die(f"'{field}' 是自動換算出來的，不能存。要改就 set {ROC_SOURCE}。")
         targets.append(field)
+    done: list[str] = []
     for field in targets:
         spec = fields[field]
         print(f"\n[{field}] {spec.label}")
         if spec.format:
             print(f"  格式：{spec.format}")
-        print("→ 輸入值（不會回顯，也不會進 shell history；security 會要求輸入兩次確認）")
-        if not kc_set(field):
+        print("→ 貼上或輸入值後按 Enter，接著再輸入一次確認（不一致會重問）。")
+        print("  打字時畫面完全不會有反應（連 * 都沒有），這是正常的，不是卡住。"
+              "值不會進 shell history。Ctrl-C 取消。")
+        try:
+            ok = kc_set(field)
+        except KeyboardInterrupt:
+            # Ctrl-C 也送給了同一個 process group 裡的 security，它不會寫到一半。
+            saved = f"（{', '.join(done)} 已存入）" if done else ""
+            die(f"已取消，{field} 沒有寫入{saved}", code=130)
+        if not ok:
             die(f"{field} 寫入 Keychain 失敗")
+        done.append(field)
         # 讀回來只為了對格式；值不會被印出來。
         stored = kc_get(field)
         if stored is not None and (why := spec.check(stored)):
@@ -782,7 +792,11 @@ def main():
     s.set_defaults(fn=cmd_fill)
 
     args = p.parse_args()
-    args.fn(args)
+    try:
+        args.fn(args)
+    except KeyboardInterrupt:
+        print("\n✗ 已取消", file=sys.stderr)
+        raise SystemExit(130)
 
 
 if __name__ == "__main__":
