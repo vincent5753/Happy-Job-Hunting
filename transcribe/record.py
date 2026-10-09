@@ -2,7 +2,8 @@
 """通話／面試錄音（macOS avfoundation → FLAC）。
 
 錄出來的檔名與 `audio/` 既有的語料同格式（`YYYY-MM-DD HH.MM.SS.flac`），
-所以錄完直接接 transcribe.py，不用改名也不用轉檔。
+所以錄完直接把路徑交給 transcribe.py（例如 `uv run transcribe.py audio/<檔名>.flac`），
+不用改名也不用轉檔。transcribe.py 不會自己去 `audio/` 找檔。
 
 用法：
     uv run record.py --list                 # 列出可用的輸入裝置
@@ -200,7 +201,7 @@ def main() -> None:
     p.add_argument("-d", "--device", default=DEFAULT_DEVICE,
                    help=f"裝置索引或名稱片段（預設「{DEFAULT_DEVICE}」）")
     p.add_argument("-o", "--out-dir", default=str(DEFAULT_OUT_DIR),
-                   help="輸出目錄（預設 audio/，transcribe.py 找檔的地方）")
+                   help="輸出目錄（預設 audio/；transcribe.py 不會自己來找，轉錄時把路徑帶給它）")
     p.add_argument("--label", default="",
                    help="檔名後綴，例如 acme-phone（預設只有時間戳）")
     p.add_argument("--rate", type=int, default=DEFAULT_RATE, help=f"取樣率（預設 {DEFAULT_RATE}）")

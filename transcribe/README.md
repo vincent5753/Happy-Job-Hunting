@@ -36,6 +36,8 @@ uv run speaker.py enroll <labels.tsv> <音檔> --add  # 把新錄音併進既有
 uv run speaker.py show
 ```
 
+`core.toml` 預設 `diarize = true`。還沒跑 `speaker.py fetch-models` 和 `enroll` 之前，轉錄照常完成，只會多一行「語者標記略過」警告；不想看到就先加 `--no-diarize`。
+
 設定優先序：命令列參數 > 設定檔 > 程式內建預設。設定檔的找法：`--config <檔>` > 環境變數 `TRANSCRIBE_CONFIG` > 腳本旁的 `core.toml`。
 
 ## 特點

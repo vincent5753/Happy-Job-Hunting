@@ -520,13 +520,19 @@ def main():
             a.pop("_data", None)
 
         if args.format == "json":
-            chunks.append(json.dumps(d, ensure_ascii=False, indent=2))
+            # 標註放第一個欄位：吃 JSON 的程式最先看到的就是它
+            chunks.append({"untrusted_notice": UNTRUSTED_BANNER, **d})
         elif args.format == "txt":
             chunks.append(render_txt(d, want))
         else:
             chunks.append(render_md(d, want))
 
-    text = "\n\n".join(chunks)
+    if args.format == "json":
+        # 單檔維持單一物件；多檔包成陣列，接在一起不是合法 JSON
+        text = json.dumps(chunks[0] if len(chunks) == 1 else chunks,
+                          ensure_ascii=False, indent=2)
+    else:
+        text = "\n\n".join(chunks)
     if args.out:
         Path(args.out).expanduser().write_text(text, encoding="utf-8")
         print(f"✓ 寫入 {args.out}", file=sys.stderr)

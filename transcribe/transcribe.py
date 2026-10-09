@@ -539,6 +539,7 @@ def main() -> int:
     if args.progress:
         install_time_progress()
 
+    failed = 0
     for src in files:
         try:
             transcribe_one(
@@ -556,11 +557,15 @@ def main() -> int:
                 s2tw=args.s2tw,
             )
         except Exception as e:
+            failed += 1
             print(f"  ✗ {src.name} 失敗：{e}", file=sys.stderr)
             if os.environ.get("HF_HUB_OFFLINE") == "1":
                 print("     （離線模式；若模型尚未下載，改加 --allow-download 先跑一次）",
                       file=sys.stderr)
 
+    if failed:
+        print(f"✗ {failed}/{len(files)} 個檔案失敗", file=sys.stderr)
+        return 1
     return 0
 
 

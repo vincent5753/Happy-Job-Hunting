@@ -31,7 +31,7 @@ uv run eml_extract.py mail.eml --save-attachments ./att
 
 | 參數 | 作用 |
 |---|---|
-| `--format md\|txt\|json` | 輸出格式，預設 `md`（可直接貼進 prep／session 檔） |
+| `--format md\|txt\|json` | 輸出格式，預設 `md`（可直接貼進 prep／session 檔）；`json` 單檔是一個物件、多檔是陣列，第一個欄位 `untrusted_notice` 是不可信來源標註 |
 | `--parts plain,html,urls,all` | 要哪些區塊，預設 `plain,urls` |
 | `--save-attachments DIR` | 抽出附件（檔名只取 basename —— 信裡的檔名是不可信輸入） |
 | `-o FILE` | 寫到檔案 |
