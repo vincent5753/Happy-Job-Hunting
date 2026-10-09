@@ -77,7 +77,11 @@ offer.pdf:(第 2 頁)                      gh_token  原文
 ## 測試
 
 **改完程式先跑 `bash test.sh`**（全部通過才算完成；`-v` 看完整輸出）。它自己建拋棄式 keychain、
-自己清掉。新功能要在 `test.sh` 補一項 `check`。`add` 的互動輸入要手動測，步驟在檔尾。
+自己清掉。新功能要在 `test.sh` 補一項 `check`。
+它**不涵蓋** login keychain 的路徑（一律設了 `SECRETFIND_KEYCHAIN`）與 `add` 的互動輸入：動到 `kc_*`、
+`load_needles` 或 `add` 時，要請使用者照 `test.sh` 檔尾手動跑一次（`add` 要真的打字，我沒辦法代跑）。
+我自己要驗證 login keychain 路徑時，可以用 `security add-generic-password -s secretfind -a selftest -w <假值>`
+寫一筆**假值**、掃一個只有假值的暫存目錄，結束時一定 `delete-generic-password` 並確認已不存在。
 
 不要拿真的 credential 測。要另外做實驗時，一樣用拋棄式 keychain，放在 scratchpad：
 

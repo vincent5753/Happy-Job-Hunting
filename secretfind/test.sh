@@ -152,9 +152,18 @@ echo "通過 $PASS、失敗 $FAIL"
 (( FAIL == 0 ))
 
 # --------------------------------------------------------------------------- #
-# 互動輸入要手動測（用的是 login keychain，測完記得 rm）：
+# 這支腳本一律設 SECRETFIND_KEYCHAIN，所以「沒設變數、直接讀 login keychain 再掃描」與
+# add 的互動輸入都不在自動測試範圍內。手動測（用的是 login keychain，最後一步會刪掉）：
 #
-#   uv run secretfind.py add selftest   # 第一個 prompt 按 Ctrl-C → 「已取消，selftest 沒有寫入」，沒有 traceback
-#   uv run secretfind.py add selftest   # 輸入同一個值兩次 → 「✓ selftest 已存入」；不一致會被重問
-#   uv run secretfind.py rm selftest
+#   D=$(mktemp -d)
+#   printf 'line1\nTOKEN=dummy-value-123\n' > "$D/leak.env"; echo nothing > "$D/clean.txt"
+#   uv run secretfind.py add selftest   # ① 第一個 prompt 按 Ctrl-C → 「已取消，selftest 沒有寫入」，沒有 traceback
+#   uv run secretfind.py add selftest   # ② 輸入 dummy-value-123 兩次 → 「✓ selftest 已存入」；不一致會被重問
+#   uv run secretfind.py list           # ③ selftest  (15 bytes)
+#   uv run secretfind.py scan "$D"      # ④ leak.env:2  selftest  原文；clean.txt 沒命中；結束碼 1
+#   uv run secretfind.py rm selftest    # ⑤
+#   uv run secretfind.py scan "$D"      # ⑥ ✓ 沒有找到；結束碼 0
+#   rm -rf "$D"
+#
+# ④⑥ 也會比對 login keychain 裡原本存的其他項目（報告只有名稱）。
 # --------------------------------------------------------------------------- #

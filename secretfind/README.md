@@ -160,7 +160,7 @@ bash test.sh       # 端對端測試，自動判定；-v 連完整輸出一起�
 
 用拋棄式 keychain 存假值、測試資料放暫存目錄，結束時（含失敗與 Ctrl-C）一律清掉，login keychain 完全不碰。
 每一項檢查結束碼、命中數與關鍵輸出，最後印出通過／失敗數，有失敗就以 1 結束。有 `soffice` 才測 PDF。
-`add` 的互動輸入與 Ctrl-C 沒辦法自動測，手動步驟寫在 `test.sh` 檔尾。
+**沒有涵蓋的路徑：** `test.sh` 一律設 `SECRETFIND_KEYCHAIN`，所以「直接讀 login keychain 再掃描」和 `add` 的互動輸入（含 Ctrl-C）都要手動測 —— 步驟（存假值 → 掃描命中 → 刪掉 → 再掃沒命中）寫在 `test.sh` 檔尾。
 
 自己另外測時，`SECRETFIND_KEYCHAIN=<路徑>` 可以把所有 Keychain 操作導到另一個 keychain 檔：
 
